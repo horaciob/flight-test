@@ -1,0 +1,12 @@
+require: rubocop-rspec
+
+AllCops:
+  RSpec:
+    Patterns:
+    - '_spec.rb$'
+
+Documentation:
+    Enabled: false
+
+Layout/HashAlignment:
+  EnforcedColonStyle: table
