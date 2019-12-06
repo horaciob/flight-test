@@ -4,7 +4,8 @@ class AirplaneType
   FREE_SEATS_MASK = 0
   AISLE_SEAT_MASK = -1
   AISLE_CHAR_MASK = '_'
-
+  
+  attr_reader :rows_count, :rows_arrangement
   def initialize(rows:, row_arrangement:)
     @rows_count = rows
     @rows_arrangement = row_arrangement.gsub(' ', '')
