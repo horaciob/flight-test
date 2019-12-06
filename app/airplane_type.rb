@@ -4,11 +4,11 @@ class AirplaneType
   FREE_SEATS_MASK = 0
   AISLE_SEAT_MASK = -1
   AISLE_CHAR_MASK = '_'
-  
-  attr_reader :rows_count, :rows_arrangement
+
+  attr_reader :rows_count, :row_arrangement
   def initialize(rows:, row_arrangement:)
     @rows_count = rows
-    @rows_arrangement = row_arrangement.gsub(' ', '')
+    @row_arrangement = row_arrangement.gsub(' ', '')
   end
 
   def seats
@@ -27,7 +27,7 @@ class AirplaneType
   end
 
   def sits_per_row
-    @sits_per_row ||= @rows_arrangement.scan(/[A-Z]/).size
+    @sits_per_row ||= @row_arrangement.scan(/[A-Z]/).size
   end
 
   def sits_count
@@ -46,7 +46,7 @@ class AirplaneType
   end
 
   def empty_row
-    @rows_arrangement.chars.map do |c|
+    @row_arrangement.chars.map do |c|
       c == AISLE_CHAR_MASK ? AISLE_SEAT_MASK : FREE_SEATS_MASK
     end
   end
