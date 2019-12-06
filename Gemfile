@@ -2,9 +2,7 @@
 
 source 'https://rubygems.org'
 
-gem 'puma'
 gem 'require_all'
-gem 'sinatra'
 
 group :development, :test do
   gem 'byebug'
@@ -14,7 +12,6 @@ group :development, :test do
 end
 
 group :test do
-  gem 'rack-test', require: 'rack/test'
   gem 'rspec'
   gem 'simplecov', require: false
 end
