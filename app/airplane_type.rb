@@ -14,8 +14,15 @@ class AirplaneType
     @seats ||= seats_struct
   end
 
-  def pretty_show
-    @seats.each
+  def debug
+    seats.each do |row|
+      row.each do |s|
+        fancy_char = AISLE_SEAT_MASK == s ? "     " : s.to_s
+        print fancy_char
+      end
+      print "\n"
+    end
+    ""
   end
 
   def sits_per_row
@@ -29,7 +36,12 @@ class AirplaneType
   private
 
   def seats_struct
-    Array.new(@rows_count, empty_row)
+    ret = []
+    @rows_count.times do
+      ret << empty_row
+    end
+
+    ret
   end
 
   def empty_row
