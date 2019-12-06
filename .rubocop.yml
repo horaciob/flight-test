@@ -10,3 +10,11 @@ Documentation:
 
 Layout/HashAlignment:
   EnforcedColonStyle: table
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*_spec.rb'
+
+RSpec/LeakyConstantDeclaration:
+  Exclude:
+    - 'spec/**/booking_handler_spec.rb'
