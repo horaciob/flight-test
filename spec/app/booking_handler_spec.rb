@@ -29,7 +29,6 @@ describe BookingHandler do
       first_handler = FalseHandler.new second_handler
 
       expect(second_handler).to receive(:process_request)
-        .once.and_call_original
 
       first_handler.process_request('fake')
     end

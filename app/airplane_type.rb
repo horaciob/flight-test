@@ -18,12 +18,12 @@ class AirplaneType
   def debug
     seats.each do |row|
       row.each do |s|
-        fancy_char = AISLE_SEAT_MASK == s ? "     " : s.to_s
+        fancy_char = AISLE_SEAT_MASK == s ? '     ' : s.to_s
         print fancy_char
       end
       print "\n"
     end
-    ""
+    ''
   end
 
   def sits_per_row
