@@ -87,6 +87,28 @@ describe SeatBlock do
     end
   end
 
+  describe '#free_seats' do
+    it 'returns all position where that value is present' do
+      regular.rows.times do |n|
+        regular.fill_row(row: n, from: 0, to: 1)
+      end
+
+      expect(regular.free_seats.size)
+        .to eq 4
+    end
+  end
+
+  describe '#find_positions_for' do
+    it 'returns all position where that value is present' do
+      regular.rows.times do |n|
+        regular.fill_row(row: n, from: 0, to: 1)
+      end
+
+      expect(regular.find_positions_for(0).size)
+        .to eq 4
+    end
+  end
+
   describe '#translate' do
     context 'when regular' do
       it 'returns A1 for 00' do

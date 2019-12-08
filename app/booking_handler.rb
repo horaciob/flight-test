@@ -10,23 +10,23 @@ class BookingHandler
     @successor = successor
   end
 
-  def process_request(request)
-    ret = accept_request(request)
+  def process_request(plane, request)
+    ret = accept_request(plane, request)
     if ret
       ret
     elsif @successor
-      @successor.process_request(request)
+      @successor.process_request(plane, request)
     else
-      fail_request(request)
+      fail_request(plane, request)
     end
   end
 
-  def fail_request(_request)
+  def fail_request(_plane, _request)
     puts 'Seats could not be assigned'
     nil
   end
 
-  def accept_request(_request)
+  def accept_request(_plane, _request)
     raise NotImplementedError, '#accept_request method must be implemented.'
   end
 end

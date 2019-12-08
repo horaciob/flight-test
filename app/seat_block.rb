@@ -48,6 +48,16 @@ class SeatBlock
     ret
   end
 
+  def free_seats
+    find_positions_for(AirplaneType::FREE_SEATS_MASK)
+  end
+
+  def find_positions_for(value)
+    ret = []
+    @m.each_with_index { |v, row, col| ret << [self, row, col] if v == value }
+    ret
+  end
+
   def translate(position)
     "#{@col_name[position.last]}#{position.first + 1}"
   end
