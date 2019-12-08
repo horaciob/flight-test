@@ -30,10 +30,10 @@ describe AirplaneType do
     end
   end
 
-  describe "#reserve" do
-    it 'raise an error if not implemented' do 
-      airplane = described_class.new(rows:1,row_arrangement:"A_B")
-      expect{airplane.reserve(2)}.to raise_error NotImplementedError
+  describe '#reserve' do
+    it 'raise an error if not implemented' do
+      airplane = described_class.new(rows: 1, row_arrangement: 'A_B')
+      expect { airplane.reserve(2) }.to raise_error NotImplementedError
     end
   end
 end

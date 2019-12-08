@@ -10,17 +10,16 @@ class Booking
 
   def book(name, amount)
     return false unless valid_amount?(amount)
+
     seats = @plane.reserve(amount)
 
-    if seats
-      @manifest.add(name, seats)
-    end
+    @manifest.add(name, seats) if seats
   end
 
   def show
-    puts "Bookings"
+    puts 'Bookings'
     @manifest.show_resume
-    puts "Result"
+    puts 'Result'
     @manifest.show_details
   end
 
