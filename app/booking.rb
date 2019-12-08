@@ -5,15 +5,24 @@ class Booking
 
   def initialize(plane)
     @plane = plane
-    @books = []
+    @manifest = Manifest.new
   end
 
-  def book(_name, amount)
+  def book(name, amount)
     return false unless valid_amount?(amount)
-    # TODO
+    seats = @plane.reserve(amount)
+
+    if seats
+      @manifest.add(name, seats)
+    end
   end
 
-  def show; end
+  def show
+    puts "Bookings"
+    @manifest.show_resume
+    puts "Result"
+    @manifest.show_details
+  end
 
   private
 

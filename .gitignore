@@ -2,3 +2,4 @@
 *.rbc
 /coverage/
 /pkg/
+.byebug_history
