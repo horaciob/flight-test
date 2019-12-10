@@ -4,6 +4,7 @@ require 'matrix'
 
 class SeatBlock
   class OutOfPositionError < StandardError; end
+  FREE_SEATS_MASK = 0
   REGULAR_ORDER = 0
   INVERSE_ORDER = 1
 
@@ -31,30 +32,37 @@ class SeatBlock
         return [row, col] if fits_in_row?(row: row, from: col, amount: amount)
       end
     end
+
     false
   end
 
   # Fills a from from a position to a position with some value
   # returns an array of position that can be translated after
-  def fill_row(row:, from:, to:, value: 1)
-    raise OutPositionException if to >= row.size
+  def fill_row(row:, from:, amount: 1, value: 1)
+    enumerator = if @order == REGULAR_ORDER
+                   to = from + amount - 1
+                   (from..to)
+                 else
+                   (from - amount + 1..from)
+                 end
 
-    ret = []
-    (from..to).each do |x|
-      @m[row, x] = value
-      ret << [row, x]
+    enumerator.map do |column|
+      @m[row, column] = value
+      Seat.new(seat_block: self, row: row, col: column)
     end
-
-    ret
   end
 
   def free_seats
-    find_positions_for(AirplaneType::FREE_SEATS_MASK)
+    find_positions_for(FREE_SEATS_MASK)
   end
 
   def find_positions_for(value)
     ret = []
-    @m.each_with_index { |v, row, col| ret << [self, row, col] if v == value }
+
+    @m.each_with_index do |v, row, col|
+      ret << Seat.new(seat_block: self, row: row, col: col) if v == value
+    end
+
     ret
   end
 
@@ -66,9 +74,13 @@ class SeatBlock
     @order = flag ? INVERSE_ORDER : REGULAR_ORDER
   end
 
+  def inverse?
+    @order == INVERSE_ORDER
+  end
+
   private
 
   def fits_in_row?(row:, from:, amount:)
-    @m.row(row)[from..from + amount - 1].count(0) == amount
+    @m.row(row)[from..from + amount - 1].count(FREE_SEATS_MASK) == amount
   end
 end

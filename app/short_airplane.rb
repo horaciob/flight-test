@@ -6,7 +6,8 @@ class ShortAirplane < AirplaneType
   end
 
   def reserve(amount)
-    handler = RandomHandler.new
+    random = RandomHandler.new
+    handler = RowHandler.new(random)
     handler.process_request(self, amount)
   end
 end

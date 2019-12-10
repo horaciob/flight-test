@@ -7,11 +7,10 @@ class RandomHandler < BookingHandler
 
     seats = free_seats.sample(request)
     ret = []
-    seats.each do |position|
-      value = position.first.fill_row(row:  position[1],
-                                      from: position[2],
-                                      to:   position[2])
-      ret << position.first.translate(value.first)
+    seats.each do |seat|
+      booked_seat = seat.seat_block.fill_row(row:  seat.row,
+                                             from: seat.col)
+      ret << booked_seat.first.translate
     end
     ret
   end

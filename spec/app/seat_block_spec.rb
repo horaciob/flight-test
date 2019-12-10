@@ -19,7 +19,7 @@ describe SeatBlock do
       end
 
       it 'returns the second one if cannot fit on the first' do
-        regular.fill_row(row: 0, from: 0, to: 0)
+        regular.fill_row(row: 0, from: 0, amount: 1)
         expect(regular.search_by_row(amount: 3)).to eq([1, 0])
       end
 
@@ -29,7 +29,7 @@ describe SeatBlock do
 
       it 'returns false if cannot find any conbination' do
         regular.rows.times do |n|
-          regular.fill_row(row: n, from: 0, to: 2)
+          regular.fill_row(row: n, from: 0, amount: 3)
         end
 
         expect(regular.search_by_row(amount: 3)).to be false
@@ -41,8 +41,8 @@ describe SeatBlock do
         expect(inverse.search_by_row(amount: 1)).to eq([0, 2])
       end
 
-      it 'returns the last column on the second row fir first is not available' do
-        inverse.fill_row(row: 0, from: 2, to: 2)
+      it 'returns the last column on the second row' do
+        inverse.fill_row(row: 0, from: 2, amount: 1)
         expect(inverse.search_by_row(amount: 2)).to eq([1, 1])
       end
 
@@ -52,7 +52,7 @@ describe SeatBlock do
 
       it 'returns false if cannot find any conbination' do
         inverse.rows.times do |n|
-          inverse.fill_row(row: n, from: 0, to: 2)
+          inverse.fill_row(row: n, from: 0)
         end
 
         expect(inverse.search_by_row(amount: 3)).to be false
@@ -61,36 +61,67 @@ describe SeatBlock do
   end
 
   describe '#fill_row' do
-    it 'returns an array of positions' do
-      ret = regular.fill_row(row: 1, from: 1, to: 2)
-      expect(ret).to eq [[1, 1], [1, 2]]
+    context 'when regular' do
+      it 'returns an array of seats' do
+        ret = regular.fill_row(row: 1, from: 1, amount: 2)
+        values = ret.map(&:to_a)
+        expect(values).to eq [[1, 1], [1, 2]]
+      end
+
+      it 'fills row 0 from 0 to 2 with value 2' do
+        regular.fill_row(row: 0, from: 0, amount: 3, value: 2)
+        expect(regular.m.row(0).to_a).to eq [2, 2, 2]
+      end
+
+      it 'fills row 3 from 0 to 0' do
+        regular.fill_row(row: 3, from: 0, amount: 3)
+        expect(regular.m.row(3).to_a).to eq [1, 1, 1]
+      end
+
+      it 'do not fills previews value on the row' do
+        regular.fill_row(row: 3, from: 1, amount: 2)
+        expect(regular.m.row(3).to_a).to eq [0, 1, 1]
+      end
+
+      it 'do not fills the value after' do
+        regular.fill_row(row: 3, from: 0, amount: 2)
+        expect(regular.m.row(3).to_a).to eq [1, 1, 0]
+      end
     end
 
-    it 'fills row 0 from 0 to 0 with value 2' do
-      regular.fill_row(row: 0, from: 0, to: 2, value: 2)
-      expect(regular.m.row(0).to_a).to eq [2, 2, 2]
-    end
+    context 'when inverse' do
+      it 'returns an array of seats' do
+        ret = inverse.fill_row(row: 1, from: 1, amount: 2)
+        values = ret.map(&:to_a)
+        expect(values).to eq [[1, 0], [1, 1]]
+      end
 
-    it 'fills row 3 from 0 to 0' do
-      regular.fill_row(row: 3, from: 0, to: 2)
-      expect(regular.m.row(3).to_a).to eq [1, 1, 1]
-    end
+      it 'fills row 0 from 2 to 0 with value 2' do
+        inverse.fill_row(row: 0, from: 2, amount: 3, value: 2)
+        expect(inverse.m.row(0).to_a).to eq [2, 2, 2]
+      end
 
-    it 'do not fills previews value on the row' do
-      regular.fill_row(row: 3, from: 1, to: 2)
-      expect(regular.m.row(3).to_a).to eq [0, 1, 1]
-    end
+      it 'fills row 3 from 0 to 0' do
+        inverse.fill_row(row: 3, from: 2, amount: 3)
+        expect(inverse.m.row(3).to_a).to eq [1, 1, 1]
+      end
 
-    it 'do not fills the value after' do
-      regular.fill_row(row: 3, from: 0, to: 1)
-      expect(regular.m.row(3).to_a).to eq [1, 1, 0]
+      it 'do not fills previews value on the row' do
+        inverse.fill_row(row: 3, from: 1, amount: 2)
+        expect(inverse.m.row(3).to_a).to eq [1, 1, 0]
+      end
+
+      it 'do not fills the value after' do
+        inverse.fill_row(row: 3, from: 2, amount: 2)
+        expect(inverse.m.row(3).to_a).to eq [0, 1, 1]
+      end
     end
   end
 
   describe '#free_seats' do
     it 'returns all position where that value is present' do
       regular.rows.times do |n|
-        regular.fill_row(row: n, from: 0, to: 1)
+        regular.fill_row(row: n, from: 0, amount: 2)
       end
 
       expect(regular.free_seats.size)
@@ -101,11 +132,11 @@ describe SeatBlock do
   describe '#find_positions_for' do
     it 'returns all position where that value is present' do
       regular.rows.times do |n|
-        regular.fill_row(row: n, from: 0, to: 1)
+        regular.fill_row(row: n, from: 0)
       end
 
       expect(regular.find_positions_for(0).size)
-        .to eq 4
+        .to eq 8
     end
   end
 
@@ -169,6 +200,16 @@ describe SeatBlock do
     it 'by default is set as regular' do
       expect(described_class.new(rows: 1, names: 'ABC_DCF').order)
         .to eq(described_class::REGULAR_ORDER)
+    end
+  end
+
+  describe '#inverse?' do
+    it 'returns true if should be treated like inverse' do
+      expect(inverse.inverse?).to be true
+    end
+
+    it 'returns false if not inversed' do
+      expect(regular.inverse?).to be false
     end
   end
 end

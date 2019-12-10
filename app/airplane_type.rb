@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class AirplaneType
-  FREE_SEATS_MASK = 0
-  AISLE_SEAT_MASK = -1
   AISLE_CHAR_MASK = '_'
 
   attr_reader :rows_count, :row_arrangement, :seats_blocks

@@ -16,17 +16,20 @@ describe AirplaneType do
     end
 
     it 'first seat blocks has a regular order' do
-      expect(sort_airplane.seats_blocks.first.order).to eq SeatBlock::REGULAR_ORDER
+      expect(sort_airplane.seats_blocks.first.order)
+        .to eq SeatBlock::REGULAR_ORDER
     end
 
     it 'if middle row has regular order' do
       big_airplane = described_class.new(rows:            26,
-                                         row_arrangement: 'A B C _ D E F G _ H I J')
-      expect(big_airplane.seats_blocks[1].order).to eq SeatBlock::REGULAR_ORDER
+                                         row_arrangement: 'ABC_DEFG_HIJ')
+      expect(big_airplane.seats_blocks[1].order)
+        .to eq SeatBlock::REGULAR_ORDER
     end
 
     it 'last seat blocks has an inverse  order' do
-      expect(sort_airplane.seats_blocks.last.order).to eq SeatBlock::INVERSE_ORDER
+      expect(sort_airplane.seats_blocks.last.order)
+        .to eq SeatBlock::INVERSE_ORDER
     end
   end
 
