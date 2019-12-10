@@ -4,4 +4,5 @@ require 'bundler'
 Bundler.require(:default, :test)
 require 'simplecov'
 SimpleCov.start
+
 require_all 'app/**.rb'

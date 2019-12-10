@@ -1,53 +1,22 @@
 # frozen_string_literal: true
 
 class AirplaneType
-  FREE_SEATS_MASK = 0
-  AISLE_SEAT_MASK = -1
   AISLE_CHAR_MASK = '_'
 
-  attr_reader :rows_count, :row_arrangement
+  attr_reader :rows_count, :row_arrangement, :seats_blocks
+
   def initialize(rows:, row_arrangement:)
     @rows_count = rows
     @row_arrangement = row_arrangement.gsub(' ', '')
-  end
 
-  def seats
-    @seats ||= seats_struct
-  end
-
-  def debug
-    seats.each do |row|
-      row.each do |s|
-        fancy_char = AISLE_SEAT_MASK == s ? '     ' : s.to_s
-        print fancy_char
-      end
-      print "\n"
-    end
-    ''
-  end
-
-  def sits_per_row
-    @sits_per_row ||= @row_arrangement.scan(/[A-Z]/).size
-  end
-
-  def sits_count
-    @rows_count * sits_per_row
-  end
-
-  private
-
-  def seats_struct
-    ret = []
-    @rows_count.times do
-      ret << empty_row
+    @seats_blocks = @row_arrangement.split(AISLE_CHAR_MASK).map do |name|
+      SeatBlock.new(rows: @rows_count, names: name)
     end
 
-    ret
+    @seats_blocks.last.inverse true if @seats_blocks.size > 1
   end
 
-  def empty_row
-    @row_arrangement.chars.map do |c|
-      c == AISLE_CHAR_MASK ? AISLE_SEAT_MASK : FREE_SEATS_MASK
-    end
+  def reserve(_amount)
+    raise NotImplementedError, "#{self.class} must implement reserve method"
   end
 end

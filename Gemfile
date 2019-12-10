@@ -8,7 +8,6 @@ group :development, :test do
   gem 'byebug'
   gem 'irb'
   gem 'rubocop'
-  gem 'rubocop-rspec'
 end
 
 group :test do
